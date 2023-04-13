@@ -16,6 +16,15 @@
     <!-- Javascript súbory -->
     <script src="/hodiny.js" type="text/javascript" defer=""></script>
     <script src="/conventor.js" type="text/javascript" defer=""></script>
+    <!--
+    <script>
+      function logout() {
+        fetch('/logout')
+          .then(response => response.text())
+          .then(() => window.location.href = 'index.html');
+      }
+      </script>
+      -->
   </head>
   <body onload="currentTime()">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -34,9 +43,22 @@
         <li class="nav-link" id="kube_id">
           <a class="nav-link" href="kubernetes.html">Kubernetes</a>
         </li>
+        <!--
+        <li class="nav-link">
+          <button onclick="logout()">Odhlásiť</button>
+        -->
+        </li>
       </ul>
+      <!--
+      <span class="navbar-text">
+        {{#if name}}
+          Prihlásený používateľ: {{name}}
+          {{/if}}
+      </span>
+    -->
     </div>
       <form class="form-inline my-2 my-lg-0">
+        <button type="button" id="main_login" class="btn btn-outline-success my-2 my-sm-0" rel="nofollow" target="_blank" onclick="location.href='login.html'">Prihlásenie</button>
         <a href="https://www.fpv.umb.sk/" id="main_web" class="btn btn-outline-success my-2 my-sm-0" rel="nofollow" target="_blank">Hlavný web</a>
       </form>
     </nav>

@@ -27,23 +27,21 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ml-auto">
-        <li class="nav-link active" id="main_id">
-          <a class="nav-link" href="index.html">Úvod <span class="sr-only">(current)</span></a>
+        <li class="nav-link" id="main_id">
+          <a class="nav-link" href="index.html">Úvod</a>
         </li>
-        <li class="nav-link" id="kube_id">
-          <a class="nav-link" href="kubernetes.html">Kubernetes</a>
+        <li class="nav-link active" id="kube_id">
+          <a class="nav-link" href="kubernetes.html">Kubernetes<span class="sr-only">(current)</span></a>
         </li>
       </ul>
     </div>
       <form class="form-inline my-2 my-lg-0">
+        <button type="button" id="main_login" class="btn btn-outline-success my-2 my-sm-0" rel="nofollow" target="_blank" onclick="location.href='login.html'">Prihlásenie</button>
         <a href="https://www.fpv.umb.sk/" id="main_web" class="btn btn-outline-success my-2 my-sm-0" rel="nofollow" target="_blank">Hlavný web</a>
       </form>
     </nav>
     <h1 class="text-center">Hello World from Marek! Toto je stránka o Kubernetes infe</h1>
     <p class="lead text-center">Kubernetes, Kubernetes, Kubernetes. Toto sú vykonané zmeny.</p>
-    <div class="text-align">
-      <button onclick="window.location.href ='/'">Návrat na úvodnú stránku</button>
-    </div>
     <div class="container">
       <h3>Kontaktný formulár</h3>
       <form>
@@ -68,7 +66,10 @@
             <input type="text" class="form-control" id="mesto" name="mesto" required>
           </div>
         </div>
-        <button type="submit" class="btn btn-succes">Odoslať</button>
+        <div class="container-wrapper wrapper">
+          <button type="submit" class="btn btn-succes">Odoslať</button>
+          <button onclick="window.location.href ='/'">Návrat na úvodnú stránku</button>
+        </div>
       </form>
       <h1 class="text-center">Hello World from Marek! Toto je stránka o Kubernetes infe</h1>
     </div>

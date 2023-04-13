@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en"> 
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <title>fpv.umb</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="/images/headerLogo.png" />
+    <!-- Moje CSS -->
+    <link rel="stylesheet" type="text/css" href="/style.css">
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="index.html">
+        <img src="images/headerLogo.png" class="logo" alt="">
+        <span class="text">Fakulta Prírodných Vied Univerzita Mateja Bela</span> 
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-link" id="main_id">
+          <a class="nav-link" href="index.html">Úvod</a>
+        </li>
+        <li class="nav-link" id="kube_id">
+          <a class="nav-link" href="kubernetes.html">Kubernetes</a>
+        </li>
+      </ul>
+    </div>
+      <form class="form-inline my-2 my-lg-0">
+        <a href="https://www.fpv.umb.sk/" id="main_web" class="btn btn-outline-success my-2 my-sm-0" rel="nofollow" target="_blank">Hlavný web</a>
+      </form>
+    </nav>
+    <div class="col-md-12">
+      <h1 class="mb-3">Prihlásenie sa do Kubernetes Webu</h1>
+    </div>
+      <form action="/login" method="POST">
+        <div class="container-wrapper wrapper">
+          <div class="col-xs-4">
+            <label for="name" class="form-label">Meno</label>
+            <input type="name" class="form-control" id="name" name="name" required/>
+          </div>
+          <div class="col-xs-4">
+            <label for="password" class="form-label">Heslo</label>
+            <input type="password" class="form-control" id="password" name="password" required/>
+          </div>
+        </div>
+          <div class="container-wrapper wrapper">
+              <button class="btn btn-succes" type="submit">Login</button>
+              <button onclick="window.location.href ='/'">Návrat na úvodnú stránku</button>
+          </div>
+      </form>
+     <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
+  </body>
+  <!-- === Footer === -->
+  <footer class="footer-light bg-light text-center text-black">
+    <div class="container">
+      <p class="mb-0">&copy; 2023 Marek Pástor</p>  
+    </div>
+  </footer>
+  <!-- Koniec Footer -->
+</html>
