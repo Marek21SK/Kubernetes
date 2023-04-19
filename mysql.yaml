@@ -70,20 +70,21 @@ metadata:
   labels:
     type: local
 spec:
-  storageClassName: cinder-high-speed
+  storageClassName: manual
   capacity:
     storage: 250Mi
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/data"
+    path: "/Kubernetes/database_data"
+  persistentVolumeReclaimPolicy: Retain
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: mysql-pv-claim
 spec:
-  storageClassName: cinder-high-speed
+  storageClassName: manual
   accessModes:
   - ReadWriteOnce
   resources:

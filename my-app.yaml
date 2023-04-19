@@ -14,12 +14,18 @@ spec:
       labels:
         app: myapp 
     spec:
+      subdomain: mysql-service
       containers:
       - name: nodeserver-myapp
         #image: cloud.canister.io:5000/pasrdfffsas/myapp:latest
         image: marek21sk/myapp_v3:latest
         ports:
         - containerPort: 3000
+        env:
+        - name: DB_HOST 
+          value: mysql-service # MySQL hostname
+        - name: DB_PORT
+          value: "3306" # MySQL port
         imagePullPolicy: Always
       imagePullSecrets:
         - name:  regcred # secret that K8s uses to access image
@@ -37,7 +43,7 @@ metadata:
 spec:
   selector:
     app: myapp 
-  type: LoadBalancer
+  type: NodePort
   ports:
   - protocol: TCP
     port: 80 # expose the service on port 80

@@ -7,6 +7,13 @@
     "detect-css-reflows/composite": "off",
     "detect-css-reflows/paint": "off",
     "disown-opener": "off",
-    "button-type": "off"
+    "button-type": "off",
+    "no-inline-styles": "off",
+    "axe/structure": [
+      "default",
+      {
+        "list": "off"
+      }
+    ]
   }
 }
