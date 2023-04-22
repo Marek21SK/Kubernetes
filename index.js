@@ -1,25 +1,26 @@
 var express = require('express');
 var path = require('path');
 var mysql = require('mysql2');
-var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 var session = require('express-session');
 
 var app = express();
 
 app.use(express.static(path.join(__dirname, '/public')));
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(session({
   secret: 'secretKey',
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: false
 }));
 
-// Vytvorenie pripojenia k databáze
+// Vytvorenie pripojenia k databáze pri použivaní Minikube
 const connection = mysql.createConnection({
   host: 'mysql-service',
   port: 3306,
   user: 'root',
-  password: 'password',
+  password: 'cGFzc3dvcmQ=',//password
   database: 'kubernetes'
 });
 
@@ -30,7 +31,7 @@ const connection = mysql.createConnection({
   host: 'localhost',
   port: 3307,
   user: 'root',
-  password: 'password',
+  password: 'cGFzc3dvcmQ=',//password
   database: 'kubernetes'
 });
 */
@@ -75,12 +76,34 @@ app.post('/login', function (req, res){
     if (rows.length > 0) {
       req.session.name = name; // uložíme meno používateľa do session
       console.log('Prihlásený! ' + req.session.name);
-      res.sendFile(path.join(__dirname, '/public/index.html'));
+      res.cookie('user', name, {maxAge: 900000, httpOnly: true, path: '/'});
+      console.log('Cookie vytvorená pre používateľa: ' + name);
+      //res.sendFile(path.join(__dirname, '/public/index.html'));
+      res.redirect('/index.html');
     } else {
       console.log('Nepsrávne prihlasovacie údaje!')
-      res.sendFile(path.join(__dirname, '/public/login.html'));
+      //res.sendFile(path.join(__dirname, '/public/login.html'));
+      res.redirect('/login.html');
     }
   });
+});
+
+app.get('/logout', function(req, res){
+  console.log(req.session.name)
+  if (req.session.name != null){   
+    req.session.destroy(function(){
+      if (req.cookies && req.cookies.user){
+        res.clearCookie('user', {domain: 'localhost', path: '/'});
+        console.log("Odhlásenie úspešné");
+      }
+      //res.sendFile(path.join(__dirname, '/public/index.html'));
+      res.redirect('/login.html');
+    });
+  }else{
+    console.log("Nemožno odhlásiť používateľ nie je prihlásený");
+    //res.sendFile(path.join(__dirname, '/public/login.html'));
+    res.redirect('/login.html');
+  }
 });
 
 app.get('/form', function (req, res){
@@ -88,7 +111,8 @@ app.get('/form', function (req, res){
   if(!req.session.name){
     return res.sendFile(path.join(__dirname, '/public/login.html'));
   }
-  res.sendFile(path.join(__dirname, '/public/kubernetes.html'));
+  //res.sendFile(path.join(__dirname, '/public/kubernetes.html'));
+  res.redirect('/kubernetes.html');
 });
 
 app.post('/form', function (req, res){
@@ -125,7 +149,8 @@ app.post('/form', function (req, res){
           res.send('Chyba pri vkladaní dát do databázy');
         }else{
           console.log('Dáta boli úspešne vložené do databázy používateľom: ' + req.session.name);
-          res.sendFile(path.join(__dirname, '/public/index.html'));
+          //res.sendFile(path.join(__dirname, '/public/index.html'));
+          res.redirect('/index.html');
         }
       });
     }
@@ -133,12 +158,16 @@ app.post('/form', function (req, res){
 });
 
 app.get('/users', function (req, res) {
-  connection.query('SELECT * FROM users', (err, rows) => {
-    if (err) throw err;
-    console.log('Data received from Db:\n');
-    console.log(rows);
-    res.json(rows);
-  });
+  if (req.session && req.session.name === 'pasrdfffsas'){ //skontrolujeme či je prihlásený používateľ pasrdfffsas
+    connection.query('SELECT * FROM users', (err, rows) => {
+      if (err) throw err;
+      console.log('Data received from Db:\n');
+      console.log(rows);
+      res.json(rows);
+    });
+  }else{ //ak nie je prihlásený používateľ pasrdfffsas tak ma nepustí do /users a presmeruje ma to na /index.html
+    res.redirect('/index.html');
+  }
 });
 
 // Spustenie servera na porte 3000

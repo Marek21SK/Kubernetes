@@ -8,17 +8,17 @@ spec:
   selector:
     matchLabels:
       app: mysql
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
         app: mysql
     spec:
       containers:
-      - name: mysql
-        image: mysql:latest
-        ports:
-        - containerPort: 3306
-          name: mysql
+      - image: mysql:latest
+        imagePullPolicy: IfNotPresent
+        name: mysql
         env:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
@@ -39,7 +39,10 @@ spec:
           valueFrom:
             secretKeyRef:
               name: mysql-user-pass
-              key: password                                     
+              key: password 
+        ports:
+        - containerPort: 3306
+          name: mysql                                    
         volumeMounts:
         - name:  mysql-persistent-storage
           mountPath:  /var/lib/mysql
@@ -52,39 +55,60 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mysql-service
+  labels:
+    app: mysql
 spec:
-  type: NodePort
   ports:
-    - port: 3306
-      targetPort: 3306
-      nodePort: 31306 # exposed port we can communicate to
+  - protocol: TCP
+    port: 3306
+    targetPort: 3306
+    nodePort: 31306 # exposed port we can communicate to
   selector:
     app: mysql
+  type: NodePort
 ---
-kind: PersistentVolume
 apiVersion: v1
+kind: PersistentVolume
 metadata:
   name: mysql-pv-volume
   labels:
     type: local
 spec:
-  storageClassName: manual
   capacity:
     storage: 250Mi
   accessModes:
-    - ReadWriteOnce
-  hostPath:
-    path: "/Kubernetes/database_data"
-  persistentVolumeReclaimPolicy: Retain
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain    
+  volumeMode: Filesystem
+  storageClassName: local-storage
+  local:
+    path: "/c/Kubernetes/database_data"
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - docker-desktop
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: mysql-pv-claim
+  labels:
+    type: local
 spec:
-  storageClassName: manual
+  storageClassName: local-storage
   accessModes:
-  - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 250Mi
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: local-storage
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
