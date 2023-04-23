@@ -109,7 +109,8 @@ app.get('/logout', function(req, res){
 app.get('/form', function (req, res){
   //Ak používateľ nie je prihlásený, presmerujeme ho na LOGIN
   if(!req.session.name){
-    return res.sendFile(path.join(__dirname, '/public/login.html'));
+    //return res.sendFile(path.join(__dirname, '/public/login.html'));
+    return res.redirect('/login.html');
   }
   //res.sendFile(path.join(__dirname, '/public/kubernetes.html'));
   res.redirect('/kubernetes.html');
@@ -118,7 +119,8 @@ app.get('/form', function (req, res){
 app.post('/form', function (req, res){
   //Ak používateľ nie je prihlásený, presmerujeme ho na LOGIN
   if (!req.session.name){
-    return res.sendFile(path.join(__dirname, '/public/login.html'));
+    //return res.sendFile(path.join(__dirname, '/public/login.html'));
+    return res.redirect('/login.html');
   }
 
   //Získanie id používateľa z tabuľky users

@@ -5,7 +5,7 @@ metadata:
   labels:
     app: myapp
 spec:
-  replicas: 2
+  replicas: 1 # počet replík, ktoré budú spustené 
   selector:
     matchLabels:
       app: myapp
@@ -14,11 +14,11 @@ spec:
       labels:
         app: myapp 
     spec:
-      subdomain: mysql-service
+      subdomain: mysql-service #sieťové prepojenie aplikácie a MySQL databázy 
       containers:
-      - name: nodeserver-myapp
-        #image: cloud.canister.io:5000/pasrdfffsas/myapp:latest
-        image: marek21sk/myapp_v3:latest
+      - name: nodeserver-myapp # názov nášho kontajnera 
+        #image: cloud.canister.io:5000/pasrdfffsas/myapp:latest # cloud.canister image fungujú rovnako ako ako Docker image
+        image: marek21sk/myapp_v3:latest # použitie našej Docker image
         ports:
         - containerPort: 3000
         env:
@@ -28,9 +28,9 @@ spec:
           value: "3306" # MySQL port
         imagePullPolicy: Always
       imagePullSecrets:
-        - name:  regcred # secret that K8s uses to access image
+        - name:  regcred # secret, ktorý Kubernetes použije pre pístup k image 
   strategy:
-    type: RollingUpdate
+    type: RollingUpdate # spôsob aktualizácie Deploymentu v Kubernetes 
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 1
@@ -46,6 +46,6 @@ spec:
   type: NodePort
   ports:
   - protocol: TCP
-    port: 8080 # expose the service on port 8080
-    targetPort: 3000 # our NodeJS app listens on port 3000
-    nodePort: 31110
+    port: 8080 # port, na ktorom bude služba vystavená 8080
+    targetPort: 3000 # naša NodeJS aplikácia počúva na porte 3000
+    nodePort: 31110 # port, na ktorom bude naša služba počúvať v prípade, že by sme nastavli prístup aplikácie z vonku 
