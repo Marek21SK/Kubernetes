@@ -15,23 +15,23 @@ app.use(session({
   saveUninitialized: false
 }));
 
-// Vytvorenie pripojenia k databáze pri použivaní Minikube
+// Vytvorenie pripojenia k databáze pri použivaní Minikube lokálneho Kubernetes klastra
 const connection = mysql.createConnection({
   host: 'mysql-service',
   port: 3306,
   user: 'root',
-  password: 'cGFzc3dvcmQ=',//password
+  password: 'cGFzc3dvcmQ=',//toto je v podstate BASE64 formát hesla "password"
   database: 'kubernetes'
 });
 
 /*
-//Cez toto pripojenie k databáze som si testoval serverovu časť mojej node js aplikácie.
+//Cez toto pripojenie k databáze som si testoval serverovu časť mojej node js aplikácie na porte 3000.
 // Vytvorenie pripojenia k databáze
 const connection = mysql.createConnection({
   host: 'localhost',
   port: 3307,
   user: 'root',
-  password: 'cGFzc3dvcmQ=',//password
+  password: 'cGFzc3dvcmQ=',//toto je v podstate BASE64 formát hesla "password"
   database: 'kubernetes'
 });
 */
@@ -140,7 +140,7 @@ app.post('/form', function (req, res){
       var email = req.body.email;
       var mesto = req.body.mesto;
 
-      //Vytvorenie dotazu na pridanie dát do tabuľky
+      //Vytvorenie dotazu na pridanie dát do tabuľky forms
       var query = "INSERT INTO forms (users_id, username, surename, email, city) VALUES (?, ?, ?, ?, ?)";
       var values = [userid, meno, priezvisko, email, mesto];
 
@@ -167,7 +167,7 @@ app.get('/users', function (req, res) {
       console.log(rows);
       res.json(rows);
     });
-  }else{ //ak nie je prihlásený používateľ pasrdfffsas tak ma nepustí do /users a presmeruje ma to na /index.html
+  }else{ //ak nie je prihlásený používateľ pasrdfffsas tak nás to nepustí do /users a presmeruje nás to na /index.html
     res.redirect('/index.html');
   }
 });

@@ -1,3 +1,4 @@
+# Tento ClusterIssues podľa "describe" funguje, len čaká na platný certifikát a cestu
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
@@ -5,6 +6,6 @@ metadata:
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
-    email: marek.pastor@h10s.eu # CHANGED TO MY EMAIL
+    email: marek.pastor@h10s.eu # Zmenené na môj email
     privateKeySecretRef:
       name: myapp-ssl-prod-key

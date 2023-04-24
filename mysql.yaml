@@ -14,14 +14,14 @@ spec:
         app: mysql
     spec:
       containers:
-      - name: mysql
-        image: mysql:latest
+      - name: mysql # názov kontajnera 
+        image: mysql:latest # určuje image, z ktorého sa má kontajner vytvoriť 
         ports:
         - containerPort: 3306
           name: mysql
         env:
-        - name: MYSQL_ROOT_PASSWORD
-          valueFrom:
+        - name: MYSQL_ROOT_PASSWORD # premenné, ktoré sa majú pridať do kontajnera 
+          valueFrom: # prístup ku secrets, ktoré sú uložené v Kubernetes
             secretKeyRef:
               name: mysql-root-pass
               key: password
@@ -43,7 +43,7 @@ spec:
         volumeMounts:
         - name:  mysql-persistent-storage
           mountPath:  /var/lib/mysql
-      volumes:
+      volumes: 
       - name: mysql-persistent-storage
         persistentVolumeClaim:
           claimName: mysql-pv-claim
@@ -55,9 +55,9 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - port: 3306
-      targetPort: 3306
-      nodePort: 31306 # exposed port we can communicate to
+    - port: 3306 # všeobecne používaný port na komunikáciu s MySQL databázou
+      targetPort: 3306 # naša databáza počúva na porte 3306 
+      nodePort: 31306 # port, na ktorom bude naša služba počúvať v prípade, že by bolo možné pristupovať k aplikácii pomocou IP adresy a portu
   selector:
     app: mysql
 ---
@@ -70,11 +70,11 @@ metadata:
 spec:
   storageClassName: manual
   capacity:
-    storage: 250Mi
+    storage: 250Mi # kapacita PV
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/Kubernetes/database_data"
+    path: "/Kubernetes/database_data" # cesta kde sa má databáza ukladať 
   persistentVolumeReclaimPolicy: Retain
 ---
 apiVersion: v1
@@ -87,4 +87,4 @@ spec:
   - ReadWriteOnce
   resources:
     requests:
-      storage: 250Mi
+      storage: 250Mi # 250MB, ktoré PVC vyžaduje dostupné, pre ukladanie do PC
