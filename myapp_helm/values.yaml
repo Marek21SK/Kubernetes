@@ -1,0 +1,43 @@
+replicaCount: 1
+
+image:
+  repository: marek21sk/myapp_v3
+  tag: latest
+  pullPolicy: Always
+
+containerPort: 3000
+
+service:
+  type: NodePort
+  port: 8080
+  targetPort: 3000
+  nodePort: 31110
+  protocol: TCP
+
+imagePullSecretsName: regcred
+
+mysql:
+  version: "latest"
+  replicaCount: 1
+  persistentVolumeClaimName: "mysql-pv-claim"
+  rootPassword:
+    secretName: "mysql-root-pass"
+    secretKey: "password"
+  databaseUrl:
+    secretName: "mysql-db-url"
+    secretKey: "database"
+  userPassword:
+    secretName: "mysql-user-pass"
+    secretKey: "password"
+    username:
+      secretName: "mysql-user-pass"
+      secretKey: "username"
+      
+  service:
+    name: mysql-service
+    type: NodePort
+    port: 3306
+    targetPort: 3306
+    nodePort: 31306
+  labels:
+    app: mysql

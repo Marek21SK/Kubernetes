@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "myapp_helm.fullname" . }}
+  labels:
+    {{- include "myapp_helm.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+        {{- include "myapp_helm.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "myapp_helm.selectorLabels" . | nindent 8 }}
+    spec:
+      subdomain: mysql-service 
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag  }}"
+        ports:
+        - containerPort: {{ .Values.containerPort }}
+        env:
+        - name: DB_HOST 
+          value: mysql-service
+        - name: DB_PORT
+          value: "3306"
+        imagePullPolicy: {{ .Values.image.PullPolicy }}
+      imagePullSecrets:
+        - name:  {{ .Values.imagePullSecretsName }} 
+  strategy:
+    type: RollingUpdate 
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "myapp_helm.fullname" . }}-service
+  labels:
+    {{- include "myapp_helm.labels" . | nindent 4 }}
+spec:
+    type: {{ .Values.service.type }}
+    ports:
+    - protocol: {{ .Values.service.protocol }}
+        port: {{ .Values.service.port }}
+        targetPort: {{ .Values.service.targetPort }} 
+        nodePort: {{ .Values.service.nodePort }}
+    selector:
+      {{- include "myapp_helm.selectorLabels" . | nindent 4 }}  

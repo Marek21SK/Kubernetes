@@ -1,0 +1,93 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name}}-mysql-deployment
+  labels:
+    app: mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  replicas: {{ .Values.replicaCount }}  
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:{{ .Values.mysql.version }}
+        ports:
+        - containerPort: 3306
+          name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom: 
+            secretKeyRef:
+              name: {{ .Values.mysql.rootPassword.secretName }}
+              key: {{ .Values.mysql.rootPassword.secretKey }}
+        - name: MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.mysql.databaseUrl.secretName }}
+              key: {{ .Values.mysql.databaseUrl.secretKey }}
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.mysql.userPassword.secretName }}
+              key: {{ .Values.mysql.userPassword.secretKey }} 
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.mysql.userPassword.username.secretName }}
+              key: {{ .Values.mysql.userPassword.username.secretKey }}                                    
+        volumeMounts:
+        - name:  mysql-persistent-storage
+          mountPath:  /var/lib/mysql
+      volumes: 
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: {{ .Values.mysql.persistentVolumeClaimName }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.mysql.service.name }}
+  labels:
+    app: {{ .Values.mysql.labels.app }}
+spec:
+  type: {{ .Values.mysql.service.type }}
+  ports:
+    - port: {{ .Values.mysql.service.port }}
+      targetPort: {{ .Values.mysql.service.targetPort }}
+      nodePort: {{ .Values.mysql.service.nodePort }}
+  selector:
+    app: {{ .Values.mysql.labels.app }}
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: mysql-pv-volume
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 250Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/Kubernetes/database_data" 
+  persistentVolumeReclaimPolicy: Retain
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+spec:
+  storageClassName: manual
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 250Mi
