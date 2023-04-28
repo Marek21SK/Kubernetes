@@ -17,7 +17,7 @@ spec:
       subdomain: mysql-service 
       containers:
       - name: {{ .Chart.Name }}
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag  }}"
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         ports:
         - containerPort: {{ .Values.containerPort }}
         env:
@@ -27,7 +27,7 @@ spec:
           value: "3306"
         imagePullPolicy: {{ .Values.image.PullPolicy }}
       imagePullSecrets:
-        - name:  {{ .Values.imagePullSecretsName }} 
+        - name: {{ .Values.imagePullSecretsName }} 
   strategy:
     type: RollingUpdate 
     rollingUpdate:
@@ -42,11 +42,11 @@ metadata:
   labels:
     {{- include "myapp_helm.labels" . | nindent 4 }}
 spec:
-    type: {{ .Values.service.type }}
-    ports:
-    - protocol: {{ .Values.service.protocol }}
-        port: {{ .Values.service.port }}
-        targetPort: {{ .Values.service.targetPort }} 
-        nodePort: {{ .Values.service.nodePort }}
-    selector:
-      {{- include "myapp_helm.selectorLabels" . | nindent 4 }}  
+  type: {{ .Values.service.type }}
+  ports:
+  - protocol: {{ .Values.service.protocol }}
+    port: {{ .Values.service.port }}
+    targetPort: {{ .Values.service.targetPort }} 
+    nodePort: {{ .Values.service.nodePort }}
+  selector:
+    {{- include "myapp_helm.selectorLabels" . | nindent 4 }}

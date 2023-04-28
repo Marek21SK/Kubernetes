@@ -11,7 +11,7 @@ service:
   type: NodePort
   port: 8080
   targetPort: 3000
-  nodePort: 31110
+  nodePort: 31120
   protocol: TCP
 
 imagePullSecretsName: regcred
@@ -19,7 +19,7 @@ imagePullSecretsName: regcred
 mysql:
   version: "latest"
   replicaCount: 1
-  persistentVolumeClaimName: "mysql-pv-claim"
+  persistentVolumeClaimName: "mysql-pv-claim-helm"
   rootPassword:
     secretName: "mysql-root-pass"
     secretKey: "password"
@@ -38,6 +38,6 @@ mysql:
     type: NodePort
     port: 3306
     targetPort: 3306
-    nodePort: 31306
+    nodePort: 31307
   labels:
     app: mysql

@@ -1,6 +1,6 @@
 apiVersion: v2
-name: myapp_helm
-description: A Helm chart for myapp_helm
+name: myapp-helm
+description: A Helm chart for myapp-helm
 
 # A chart can be either an 'application' or a 'library' chart.
 #

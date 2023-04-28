@@ -67,9 +67,13 @@ spec:
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: mysql-pv-volume
+  name: mysql-pv-volume-helm
+  namespace: myapp-helm
   labels:
     type: local
+    app.kubernetes.io/managed-by: Helm
+    meta.helm.sh/release-name: myapp-helm
+    meta.helm.sh/release-namespace: myapp-helm
 spec:
   storageClassName: manual
   capacity:
@@ -83,7 +87,8 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mysql-pv-claim
+  name: mysql-pv-claim-helm
+  namespace: myapp-helm
 spec:
   storageClassName: manual
   accessModes:
