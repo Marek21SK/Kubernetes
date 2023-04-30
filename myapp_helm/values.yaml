@@ -1,8 +1,8 @@
 replicaCount: 1
 
 image:
-  repository: marek21sk/myapp_v3
-  tag: latest
+  repository: marek21sk/myapp_v11
+  tag: "latest"
   pullPolicy: Always
 
 containerPort: 3000
@@ -13,13 +13,15 @@ service:
   targetPort: 3000
   nodePort: 31120
   protocol: TCP
+  name: myapp-service
 
 imagePullSecretsName: regcred
 
 mysql:
+  namespace: "myapp-helm"
   version: "latest"
   replicaCount: 1
-  persistentVolumeClaimName: "mysql-pv-claim-helm"
+  containerPort: 3306
   rootPassword:
     secretName: "mysql-root-pass"
     secretKey: "password"

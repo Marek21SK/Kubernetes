@@ -38,7 +38,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "myapp_helm.fullname" . }}-service
+  name: {{ include "myapp_helm.fullname" . }}
   labels:
     {{- include "myapp_helm.labels" . | nindent 4 }}
 spec:
@@ -48,5 +48,6 @@ spec:
     port: {{ .Values.service.port }}
     targetPort: {{ .Values.service.targetPort }} 
     nodePort: {{ .Values.service.nodePort }}
+    name: {{ .Values.service.name }}
   selector:
     {{- include "myapp_helm.selectorLabels" . | nindent 4 }}
