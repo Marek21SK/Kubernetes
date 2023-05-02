@@ -1,12 +1,8 @@
 replicaCount: 1
-
 image:
   repository: marek21sk/myapp_v11
   tag: "latest"
   pullPolicy: Always
-
-containerPort: 3000
-
 service:
   type: NodePort
   port: 8080
@@ -14,32 +10,4 @@ service:
   nodePort: 31120
   protocol: TCP
   name: myapp-service
-
 imagePullSecretsName: regcred
-
-mysql:
-  namespace: "myapp-helm"
-  version: "latest"
-  replicaCount: 1
-  containerPort: 3306
-  rootPassword:
-    secretName: "mysql-root-pass"
-    secretKey: "password"
-  databaseUrl:
-    secretName: "mysql-db-url"
-    secretKey: "database"
-  userPassword:
-    secretName: "mysql-user-pass"
-    secretKey: "password"
-    username:
-      secretName: "mysql-user-pass"
-      secretKey: "username"
-      
-  service:
-    name: mysql-service
-    type: NodePort
-    port: 3306
-    targetPort: 3306
-    nodePort: 31307
-  labels:
-    app: mysql
